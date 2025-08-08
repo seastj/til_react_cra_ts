@@ -1,17 +1,28 @@
-import Counter from './components/Counter';
-import NameEditor from './components/NameEditor';
-import ToggleSwitch from './components/ToggleSwitch';
-import User from './components/User';
+import { useState } from 'react';
+import TodoList from './todos/TodoList';
+import TodoWrite from './todos/TodoWrite';
+import { ITodoType, TodoType } from './types/todoType';
 
 function App(): JSX.Element {
+  // ts
+  // {id : "", title : "", completed : false}
+
+  // tsx
+  const [todos, setTodos] = useState<(TodoType | ITodoType)[]>([]);
+  const handleTodoUpdate = () => {
+    // setTodos();
+  };
+  // todo 목록에서 실행할 함수들
+  const onToggle: () => void = () => {};
+  const onDelete: () => void = () => {};
+  const onEdit: () => void = () => {};
+
   return (
     <div>
+      <h1>할일 앱서비스</h1>
       <div>
-        <h1>useState 예제</h1>
-        <Counter />
-        <NameEditor />
-        <ToggleSwitch />
-        <User />
+        <TodoWrite setTodos={setTodos} handleTodoUpdate={handleTodoUpdate} />
+        <TodoList todos={todos} onToggle={onToggle} onDelete={onDelete} onEdit={onEdit} />
       </div>
     </div>
   );
