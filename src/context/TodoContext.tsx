@@ -1,12 +1,9 @@
-import { TodoType } from '../types/todoType';
+import { TodoType } from '@/types/todoType';
 import { createContext, useCallback, useContext, useMemo, useReducer } from 'react';
 
-// 전역 state 에서 관리할 데이터 모양
 type TodoState = {
   todos: TodoType[];
 };
-
-// 1. 초기값
 const initialState: TodoState = {
   todos: [],
 };
@@ -20,10 +17,11 @@ type todoAction = AddAction | toggleAction | deleteAction | editAction;
 
 function todosReducer(state: TodoState, action: todoAction): TodoState {
   switch (action.type) {
-    case 'ADD':
+    case 'ADD': {
       // {type:'ADD', payload: {id:"날짜", title:"안녕", complted:false}}
       const todo = action.payload;
       return { ...state, todos: [todo, ...state.todos] };
+    }
     case 'TOGGLE': {
       //  { id: string }
       //   const id = action.payload.id;
@@ -50,24 +48,24 @@ function todosReducer(state: TodoState, action: todoAction): TodoState {
       return state;
   }
 }
-
 // 3. Context 생성
-// - Context 에서 관리할 Value 타입
+//- Context 에서 관리할 Value 타입
 type TodoContextValue = {
-  todos: (todo: TodoType) => void;
+  todos: TodoType[];
   addTodo: (todo: TodoType) => void;
   toggleTodo: (id: string) => void;
   deleteTodo: (id: string) => void;
   editTodo: (id: string, title: string) => void;
 };
-export const TodoContext = createContext<TodoContextValue | null>(null);
+const TodoContext = createContext<TodoContextValue | null>(null);
 
 // 4. Provide 생성
 // export const TodoProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
 export const TodoProvider = ({ children }: React.PropsWithChildren): JSX.Element => {
-  // 5. useReducer 로 state 관리하기
-  //   const [state, dispatch] = useReducer(리듀서함수, 초기값);
+  // 5. useReduce 로 state 관리하기
+  //   const [state, dispatch] = useReducer(리듀서함수, 초기값)
   const [state, dispatch] = useReducer(todosReducer, initialState);
+
   // dispatch 전용 함수
   const addTodo = useCallback((todo: TodoType) => {
     dispatch({ type: 'ADD', payload: todo });
@@ -82,19 +80,25 @@ export const TodoProvider = ({ children }: React.PropsWithChildren): JSX.Element
     dispatch({ type: 'EDIT', payload: { id, title } });
   }, []);
 
-  // Context 의 value 는 현재 {} 로 정의되어 있다.
+  // Context 의  value 는 현재 {} 로 정의되어 있다.
   const value = useMemo(
-    () => ({ todos: state.todos, addTodo, toggleTodo, deleteTodo, editTodo }),
+    () => ({
+      todos: state.todos,
+      addTodo,
+      toggleTodo,
+      deleteTodo,
+      editTodo,
+    }),
     [state.todos, addTodo, toggleTodo, deleteTodo, editTodo],
   );
+
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
 };
-
 // 커스텀훅
 export function useTodos() {
   const ctx = useContext(TodoContext);
   if (!ctx) {
-    throw new Error('ctx 가 없습니다.');
+    throw new Error('ctx 가 없어요.');
   }
   return ctx;
 }

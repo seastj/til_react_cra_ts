@@ -3,9 +3,10 @@ import { todoAction, TodoState } from './types';
 
 export function todosReducer(state: TodoState, action: todoAction): TodoState {
   switch (action.type) {
-    case 'ADD':
+    case 'ADD': {
       const todo = action.payload;
       return { ...state, todos: [todo, ...state.todos] };
+    }
     case 'TOGGLE': {
       const { id } = action.payload;
       const arr: TodoType[] = state.todos.map(todo =>
