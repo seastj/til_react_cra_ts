@@ -6,6 +6,7 @@
 
 ```bash
 npx create-react-app 프로젝트명소문자 --template typescript
+
 npx create-react-app . --template typescript
 ```
 
@@ -13,6 +14,9 @@ npx create-react-app . --template typescript
 
 ```bash
 npm install react@18.2.0 react-dom@18.2.0
+
+npm uninstall @types/react @types/react-dom
+npm i -E @types/react@18.3.12 @types/react-dom@18.3.1
 ```
 
 ## 2. ESLint / Prettier 호환 패키지 설치
